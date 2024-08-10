@@ -1,0 +1,35 @@
+name: Export
+
+on: [pull_request, push]
+#on:
+#  push:
+#    paths:
+#    - '**.kicad_sch'
+#    - '**.kicad_pcb'
+#    - '**.round-tracks-config'
+#  pull_request:
+#    paths:
+#      - '**.kicad_sch'
+#      - '**.kicad_pcb'
+#      - '**.round-tracks-config'
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: INTI-CMNB/KiBot@v2_k8
+      with:
+        # Required - kibot config file
+        config: config.kibot.yaml
+        # optional - prefix to output defined in config
+        dir: output
+        # optional - schematic file
+        schema: 'BLLED.kicad_sch'
+        # optional - PCB design file
+        board: 'BLLED.kicad_pcb'
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: output
+        path: output
